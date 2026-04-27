@@ -225,18 +225,29 @@
       }
     });
 
-    new Array(CHECKBOX_COUNT).fill(null).forEach((_, index) => {
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.id = `checkbox-${index}`;
+    //Fetching state from backend, instead from frontend
+    window.addEventListener("load", async () => {
+      const response = await fetch("/checkboxes");
+      const data = await response.json();
+      if (data && data.checkboxes) {
+        data.checkboxes.forEach((checked, index) => {
+          const input = document.createElement("input");
 
-      input.addEventListener("change", (event) => {
-        const checked = event.target.checked;
-        console.log("Checked Changed", { index, checked });
-        socket.emit("client:checkbox:change", { index, checked });
-      });
+          input.type = "checkbox";
+          input.id = `checkbox-${index}`;
+          input.checked = checked;
 
-      conatiner.appendChild(input);
+          input.addEventListener("change", (event) => {
+            const checked = event.target.checked;
+            console.log("Checked Changed", { index, checked });
+            socket.emit("client:checkbox:change", { index, checked });
+          });
+          conatiner.appendChild(input);
+        });
+      }
     });
+
+    // Basic way to create checkboxes without fetching initial state
+    // new Array(CHECKBOX_COUNT).fill(null).forEach((_, index) => {});
   </script>
 </html>
