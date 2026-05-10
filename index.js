@@ -19,7 +19,12 @@ async function main() {
   const app = express();
   const server = http.createServer(app);
 
-  const io = new Server();
+  const io = new Server({
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });
   io.attach(server);
 
   await subscriber.subscribe("Internal-server:checkbox:change");
