@@ -22,8 +22,8 @@ async function main() {
   const io = new Server({
     cors: {
       origin: "*",
-      methods: ["GET", "POST"]
-    }
+      methods: ["GET", "POST"],
+    },
   });
   io.attach(server);
 
